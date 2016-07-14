@@ -1,0 +1,38 @@
+{
+  "name": "react-datepicker-wl",
+  "main": "react-datepicker-wl.js",
+  "description": "React-based datepicker, with MS Windows-like zoom effect to choose month, year and decade.",
+  "homepage": "https://github.com/aevgrafov/react.datepicker.wl",
+  "keywords": [
+    "react",
+    "datepicker",
+    "windows"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Volicon/backbone.nestedTypes.git"
+  },
+  "author": "Alexander Evgrafov <https://github.com/aevgrafov>",
+  "contributors": "",
+  "dependencies": {
+    "underscore": ">=1.5.0"
+  },
+  "devDependencies": {
+    "requirejs": "^2.1.20",
+    "babel": "<6.0.0",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-motion": "^0.4.1",
+    "webpack": "^1.12.2"
+  },
+  "files": [
+    "react-datepicker-wl.js",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "watch": "./node_modules/.bin/webpack --watch"
+  }
+}
