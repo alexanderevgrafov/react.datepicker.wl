@@ -15,14 +15,18 @@
   "author": "Alexander Evgrafov <https://github.com/aevgrafov>",
   "contributors": "",
   "dependencies": {
+    "classnames": "^2.2.5",
+    "moment": "^2.14.1",
+    "react-motion": "^0.4.1",
     "underscore": ">=1.5.0"
   },
   "devDependencies": {
-    "requirejs": "^2.1.20",
     "babel": "<6.0.0",
+    "babel-core": "<6.0.0",
+    "babel-loader": "<6.0.0",
+    "babel-runtime": "<6.0.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
-    "react-motion": "^0.4.1",
     "webpack": "^1.12.2"
   },
   "files": [

@@ -1,0 +1,34 @@
+.month {
+    width: 400px;
+    border: 3px solid blue;
+    margin: 100px;
+    text-align: center;
+}
+
+.row {
+    display: flex;
+}
+
+.month .cell {
+    flex: 1 1;
+    display: inline-block;
+    border: 1px solid silver;
+}
+
+.today {
+    color:maroon;
+}
+
+.out {
+    color:silver;
+}
+
+.month .prev,
+.month .next {
+    flex:1 1;
+    cursor: pointer;
+}
+
+.month .title {
+    flex:5 1;
+}

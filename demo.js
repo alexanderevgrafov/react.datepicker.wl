@@ -48,16 +48,19 @@
 	
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(159);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
 	var _srcMainJsx = __webpack_require__(160);
 	
 	var _srcMainJsx2 = _interopRequireDefault(_srcMainJsx);
-
-	exports['default'] = _srcMainJsx2['default'];
-	module.exports = exports['default'];
+	
+	_reactDom2['default'].render(_react2['default'].createElement(_srcMainJsx2['default'], { prop1: 'First prop here' }), document.getElementById('central'));
 
 /***/ },
 /* 1 */
@@ -19698,7 +19701,15 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 159 */,
+/* 159 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	module.exports = __webpack_require__(4);
+
+
+/***/ },
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35768,4 +35779,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=react-datepicker-wl.js.map
+//# sourceMappingURL=demo.js.map
