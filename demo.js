@@ -19717,7 +19717,7 @@
 	
 	var _objectWithoutProperties = __webpack_require__(162)["default"];
 	
-	var _extends = __webpack_require__(163)["default"];
+	var _Object$assign = __webpack_require__(164)["default"];
 	
 	var _interopRequireDefault = __webpack_require__(1)["default"];
 	
@@ -19740,108 +19740,246 @@
 	var MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
 	    WDAYS = ["su", "mo", "tu", "we", "th", "fr", "sa"];
 	
-	var Month = function Month(_ref) {
-	    var curdate = _ref.curdate;
+	var LevelTags = {
+	    month: function month(_ref) {
+	        var curdate = _ref.curdate;
 	
-	    var props = _objectWithoutProperties(_ref, ["curdate"]);
+	        var props = _objectWithoutProperties(_ref, ["curdate"]);
 	
-	    var mnames = props.month_names || MONTHS,
-	        wdays = props.wday_names || WDAYS,
-	        day = (0, _moment2["default"])(curdate).startOf('month').startOf('week').startOf('day'),
-	        //.day(-7),
-	    last = (0, _moment2["default"])(curdate).endOf('month').endOf('week').startOf('day'),
-	        days = [];
+	        var mnames = props.month_names || MONTHS,
+	            wdays = props.wday_names || WDAYS,
+	            day = (0, _moment2["default"])(curdate).startOf('month').startOf('week').startOf('day'),
+	            //.day(-7),
+	        last = (0, _moment2["default"])(curdate).endOf('month').endOf('week').startOf('day'),
+	            days = [];
 	
-	    while (day.isBefore(last)) {
-	        var week = [];
-	        for (var d = 0; d < 7; d++) {
-	            week.push(_react2["default"].createElement(
-	                "div",
-	                { className: (0, _classnames2["default"])('cell', { out: day.month() != curdate.month(), today: day.dayOfYear() == (0, _moment2["default"])().dayOfYear() }),
-	                    key: d },
-	                day.date()
-	            ));
-	            day.add(1, 'd');
-	        }
-	        days.push(_react2["default"].createElement(
-	            "div",
-	            { className: "row week", key: day.date() },
-	            week
-	        ));
-	    }
-	
-	    return _react2["default"].createElement(
-	        "div",
-	        { className: "month" },
-	        _react2["default"].createElement(
-	            "div",
-	            { className: "row" },
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "prev", onClick: function () {
-	                        props.shift(curdate.subtract(1, 'M'));
-	                    } },
-	                " < "
-	            ),
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "title", onClick: function () {
-	                        props.zoom(1);
-	                    } },
-	                mnames[curdate.month()],
-	                " ",
-	                curdate.year()
-	            ),
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "next", onClick: function () {
-	                        props.shift(curdate.add(1, 'M'));
-	                    } },
-	                " > "
-	            )
-	        ),
-	        _react2["default"].createElement(
-	            "div",
-	            { className: "row wdays" },
-	            _.map(wdays, function (wd) {
-	                return _react2["default"].createElement(
+	        while (day.isBefore(last)) {
+	            var week = [];
+	            for (var d = 0; d < 7; d++) {
+	                week.push(_react2["default"].createElement(
 	                    "div",
-	                    { className: "cell wdname", key: wd },
-	                    wd
-	                );
-	            })
-	        ),
-	        _react2["default"].createElement(
+	                    {
+	                        className: (0, _classnames2["default"])('cell', { out: day.month() != curdate.month(), today: day.dayOfYear() == (0, _moment2["default"])().dayOfYear() }),
+	                        key: d },
+	                    day.date()
+	                ));
+	                day.add(1, 'd');
+	            }
+	            days.push(_react2["default"].createElement(
+	                "div",
+	                { className: "row week", key: day.date() },
+	                week
+	            ));
+	        }
+	
+	        return _react2["default"].createElement(
 	            "div",
-	            { className: "days" },
-	            days
-	        )
-	    );
+	            { className: "body month" },
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "row" },
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "prev", onClick: function () {
+	                            props.shift(curdate.subtract(1, 'M'));
+	                        } },
+	                    " < "
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "title",
+	                        onClick: function () {
+	                            props.level('year');
+	                        } },
+	                    mnames[curdate.month()],
+	                    " ",
+	                    curdate.year()
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "next", onClick: function () {
+	                            props.shift(curdate.add(1, 'M'));
+	                        } },
+	                    " > "
+	                )
+	            ),
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "row wdays" },
+	                _.map(wdays, function (wd) {
+	                    return _react2["default"].createElement(
+	                        "div",
+	                        { className: "cell wdname", key: wd },
+	                        wd
+	                    );
+	                })
+	            ),
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "days" },
+	                days
+	            )
+	        );
+	    },
+	    year: function year(_ref2) {
+	        var curdate = _ref2.curdate;
+	
+	        var props = _objectWithoutProperties(_ref2, ["curdate"]);
+	
+	        var mnames = props.month_names || MONTHS,
+	            months = [];
+	
+	        for (var j = 0; j < 3; j++) {
+	            var season = [];
+	
+	            var _loop = function (i) {
+	                var k = j * 4 + i;
+	                season.push(_react2["default"].createElement(
+	                    "div",
+	                    { className: "cell", key: k,
+	                        onClick: function () {
+	                            props.level('month', new _moment2["default"](curdate).month(k));
+	                        } },
+	                    mnames[k]
+	                ));
+	            };
+	
+	            for (var i = 0; i < 4; i++) {
+	                _loop(i);
+	            }
+	            months.push(_react2["default"].createElement(
+	                "div",
+	                { className: "row", key: j },
+	                season
+	            ));
+	        }
+	
+	        return _react2["default"].createElement(
+	            "div",
+	            { className: "body year" },
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "row" },
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "prev", onClick: function () {
+	                            props.shift(curdate.subtract(1, 'Y'));
+	                        } },
+	                    " < "
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "title", onClick: function () {
+	                            props.level('decade');
+	                        } },
+	                    curdate.year()
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "next", onClick: function () {
+	                            props.shift(curdate.add(1, 'Y'));
+	                        } },
+	                    " > "
+	                )
+	            ),
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "months" },
+	                months
+	            )
+	        );
+	    },
+	    decade: function decade(_ref3) {
+	        var curdate = _ref3.curdate;
+	
+	        var props = _objectWithoutProperties(_ref3, ["curdate"]);
+	
+	        var start = Math.floor(curdate.year() / 10) * 10 - 1,
+	            years = [];
+	
+	        for (var j = 0; j < 3; j++) {
+	            var ys = [];
+	
+	            var _loop2 = function (i) {
+	                var k = j * 4 + i;
+	                ys.push(_react2["default"].createElement(
+	                    "div",
+	                    { className: (0, _classnames2["default"])('cell', { out: !k || k == 11 }), key: k,
+	                        onClick: function () {
+	                            props.level('year', new _moment2["default"]().year(start + k));
+	                        } },
+	                    start + k
+	                ));
+	            };
+	
+	            for (var i = 0; i < 4; i++) {
+	                _loop2(i);
+	            }
+	            years.push(_react2["default"].createElement(
+	                "div",
+	                { className: "row", key: j },
+	                ys
+	            ));
+	        }
+	
+	        return _react2["default"].createElement(
+	            "div",
+	            { className: "body decade" },
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "row" },
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "prev", onClick: function () {
+	                            props.shift(curdate.subtract(10, 'Y'));
+	                        } },
+	                    " < "
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "title" },
+	                    start + 1,
+	                    " - ",
+	                    start + 10
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "next", onClick: function () {
+	                            props.shift(curdate.add(10, 'Y'));
+	                        } },
+	                    " > "
+	                )
+	            ),
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "years" },
+	                years
+	            )
+	        );
+	    }
 	};
 	
 	exports["default"] = _react2["default"].createClass({
 	    displayName: "main",
 	
-	    state: {
-	        curdate: Object
-	    },
-	
 	    componentWillMount: function componentWillMount() {
-	        this.setState({ curdate: (0, _moment2["default"])(this.props.date || new Date()) });
+	        this.setState({ curdate: (0, _moment2["default"])(this.props.date || new Date()), level: 'month' });
 	    },
 	
 	    onShift: function onShift(date) {
 	        this.setState({ curdate: date });
 	    },
 	
-	    onZoom: function onZoom(dir) {
-	        console.log('Zoom ', dir > 0 ? 'out' : 'in');
+	    onLevel: function onLevel(level, date) {
+	        var dt = { level: level };
+	        date && (dt.curdate = date);
+	        this.setState(dt);
 	    },
 	
 	    render: function render() {
-	        return _react2["default"].createElement(Month, _extends({}, this.props, { curdate: this.state.curdate, shift: this.onShift, zoom: this.onZoom }));
+	        //        let tag = this.state.level.substr(0, 1).toUpperCase() + this.state.level.substr(1);
+	        return _react2["default"].createElement(LevelTags[this.state.level], _Object$assign({}, this.props, { curdate: this.state.curdate, shift: this.onShift, level: this.onLevel }));
 	    }
-	
 	});
 	module.exports = exports["default"];
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(161)))
@@ -21421,30 +21559,7 @@
 	exports.__esModule = true;
 
 /***/ },
-/* 163 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _Object$assign = __webpack_require__(164)["default"];
-	
-	exports["default"] = _Object$assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];
-	
-	    for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }
-	
-	  return target;
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
+/* 163 */,
 /* 164 */
 /***/ function(module, exports, __webpack_require__) {
 

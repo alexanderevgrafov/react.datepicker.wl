@@ -1,4 +1,4 @@
-.month {
+.body {
     width: 400px;
     border: 3px solid blue;
     margin: 100px;
@@ -9,7 +9,7 @@
     display: flex;
 }
 
-.month .cell {
+.body .cell {
     flex: 1 1;
     display: inline-block;
     border: 1px solid silver;
@@ -23,12 +23,12 @@
     color:silver;
 }
 
-.month .prev,
-.month .next {
+.body .prev,
+.body .next {
     flex:1 1;
     cursor: pointer;
 }
 
-.month .title {
+.body .title {
     flex:5 1;
 }
