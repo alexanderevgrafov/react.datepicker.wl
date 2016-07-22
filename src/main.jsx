@@ -152,6 +152,7 @@ export default React.createClass({
             animId: this.state.animId + 1
         };
         this.prevlevel = this.state.level;
+        this.prevdate = this.state.curdate.clone();
         date && (dt.curdate = date);
         this.setState(dt);
     },
@@ -179,24 +180,24 @@ export default React.createClass({
             willEnter={ ()=>this.willEnterLeave(true) }
             willLeave={ ()=>this.willEnterLeave(false) }
             styles={[{ key: 'k' + this.state.animId, style:{ slide:spring(0), zoom:spring(0) }}]}
-        >{ interpolate => {
-            return <div className="calendar_wl_box">{
-                interpolate.map( conf => {
-                    return <div className="calendar_wl_container" key={ conf.key }
-                                style={ {
+        >{ interpolate => <div className="calendar_wl_box">{
+            interpolate.map( conf => {
+                let isnew = conf.key == 'k'+this.state.animId;
+                return <div className="calendar_wl_container" key={ conf.key }
+                            style={ {
                                 left: conf.style.slide*100 + '%',
                                 opacity: 1 - Math.abs(conf.style.zoom + conf.style.slide),
                                 transform: 'scale( '+(conf.style.zoom + 1 ) + ')',
-                                zIndex: conf.key == this.state.animId ? 2 : 1
+                                zIndex: isnew ? 2 : 1
                                 } }>{
-                        React.createElement(LevelTags[conf.key == this.state.animId ? this.state.level : this.prevlevel], Object.assign({}, this.props, {
-                            curdate: conf.key == this.state.animId ? this.state.curdate.clone() : this.prevdate,
-                            onShift: this.onShift,
-                            onLevel: this.onLevel,
-                            onSelect: this.onSelect
-                            }))
-                        }</div>})
-                }</div>}
-            }</TransitionMotion>;
+                    React.createElement(LevelTags[isnew ? this.state.level : this.prevlevel], Object.assign({}, this.props, {
+                        curdate: isnew ? this.state.curdate.clone() : this.prevdate,
+                        onShift: this.onShift,
+                        onLevel: this.onLevel,
+                        onSelect: this.onSelect
+                        }))
+                    }</div>})
+            }</div>
+        }</TransitionMotion>;
     }
 })

@@ -20032,6 +20032,7 @@
 	            animId: this.state.animId + 1
 	        };
 	        this.prevlevel = this.state.level;
+	        this.prevdate = this.state.curdate.clone();
 	        date && (dt.curdate = date);
 	        this.setState(dt);
 	    },
@@ -20073,6 +20074,7 @@
 	                    "div",
 	                    { className: "calendar_wl_box" },
 	                    interpolate.map(function (conf) {
+	                        var isnew = conf.key == 'k' + _this.state.animId;
 	                        return _react2["default"].createElement(
 	                            "div",
 	                            { className: "calendar_wl_container", key: conf.key,
@@ -20080,10 +20082,10 @@
 	                                    left: conf.style.slide * 100 + '%',
 	                                    opacity: 1 - Math.abs(conf.style.zoom + conf.style.slide),
 	                                    transform: 'scale( ' + (conf.style.zoom + 1) + ')',
-	                                    zIndex: conf.key == _this.state.animId ? 2 : 1
+	                                    zIndex: isnew ? 2 : 1
 	                                } },
-	                            _react2["default"].createElement(LevelTags[conf.key == _this.state.animId ? _this.state.level : _this.prevlevel], _Object$assign({}, _this.props, {
-	                                curdate: conf.key == _this.state.animId ? _this.state.curdate.clone() : _this.prevdate,
+	                            _react2["default"].createElement(LevelTags[isnew ? _this.state.level : _this.prevlevel], _Object$assign({}, _this.props, {
+	                                curdate: isnew ? _this.state.curdate.clone() : _this.prevdate,
 	                                onShift: _this.onShift,
 	                                onLevel: _this.onLevel,
 	                                onSelect: _this.onSelect
