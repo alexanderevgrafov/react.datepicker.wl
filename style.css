@@ -1,11 +1,25 @@
-.body {
-    width: 400px;
+.calendar_wl_box {
+    position:absolute;
+    top:300px;
+    left:450px;
+    width: 300px;
+    height:300px;
     border: 3px solid blue;
-    margin: 100px;
+}
+
+.calendar_wl_container {
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+
+.body {
+    width:100%;
+    height:100%;
     text-align: center;
 }
 
-.row {
+.body .row {
     display: flex;
 }
 
@@ -13,22 +27,41 @@
     flex: 1 1;
     display: inline-block;
     border: 1px solid silver;
+    cursor: pointer;
 }
 
-.today {
+.body .cell:hover {
+    background-color:rgba(0,0,255,.2);
+}
+
+.body .cell.out,
+.body .cell.wdname {
+    background-color: transparent;
+    cursor: default;
+}
+
+.body .cell.today {
     color:maroon;
 }
 
-.out {
+.body .cell.other {
     color:silver;
 }
+
+.body .cell.out {
+    color: #d0d0d0;
+ }
 
 .body .prev,
 .body .next {
     flex:1 1;
     cursor: pointer;
 }
+.body .noshift {
+    flex:1 1;
+}
 
 .body .title {
     flex:5 1;
+    cursor: pointer;
 }
