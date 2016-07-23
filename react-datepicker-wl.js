@@ -19704,8 +19704,6 @@
 
 	/* WEBPACK VAR INJECTION */(function(_) {"use strict";
 	
-	var _objectWithoutProperties = __webpack_require__(162)["default"];
-	
 	var _Object$assign = __webpack_require__(163)["default"];
 	
 	var _interopRequireDefault = __webpack_require__(1)["default"];
@@ -19731,57 +19729,181 @@
 	var MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
 	    WDAYS = ["su", "mo", "tu", "we", "th", "fr", "sa"];
 	
-	var LevelTags = {
-	    month: function month(_ref) {
+	var getMinMax = function getMinMax(level, curdate, pMin, pMax) {
+	    var max = pMax && (0, _moment2["default"])(pMax),
+	        min = pMin && (0, _moment2["default"])(pMin);
+	
+	    switch (level) {
+	        case 'month':
+	            return {
+	                min: min && min.isAfter(curdate.startOf('month')) && min,
+	                max: max && max.isBefore(curdate.endOf('month')) && max
+	            };
+	        case 'year':
+	            return {
+	                min: min && curdate.year() == min.year() && min.month() + 1,
+	                max: max && curdate.year() == max.year() && max.month() + 1
+	            };
+	        case 'decade':
+	            var start = Math.floor(curdate.year() / 10) * 10 - 1;
+	            min = min && min.year();
+	            max = max && max.year();
+	            return {
+	                min: min >= start && min <= start + 10 && min,
+	                max: max >= start && max <= start + 10 && max
+	            };
+	    }
+	};
+	
+	var Tags = {
+	    month_head: function month_head(_ref) {
 	        var curdate = _ref.curdate;
-	
-	        var props = _objectWithoutProperties(_ref, ["curdate"]);
-	
-	        var mnames = props.month_names || MONTHS,
-	            wdays = props.wday_names || WDAYS,
-	            day = (0, _moment2["default"])(curdate).startOf('month').startOf('week').startOf('day'),
-	            //.day(-7),
-	        last = (0, _moment2["default"])(curdate).endOf('month').endOf('week').startOf('day'),
-	            days = [],
-	            maxDate = props.maxDate && (0, _moment2["default"])(props.maxDate),
-	            minDate = props.minDate && (0, _moment2["default"])(props.minDate);
-	
-	        var header = _react2["default"].createElement(
+	        var lim = _ref.lim;
+	        var level = _ref.level;
+	        var month_names = _ref.month_names;
+	        var wday_names = _ref.wday_names;
+	        var onShift = _ref.onShift;
+	        var onLevel = _ref.onLevel;
+	        return _react2["default"].createElement(
 	            "div",
-	            { className: "row" },
-	            minDate && minDate.isSameOrAfter(day) ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
+	            { className: "head " + level },
+	            _react2["default"].createElement(
 	                "div",
-	                { className: "prev",
-	                    onClick: function () {
-	                        props.onShift(curdate.subtract(1, 'M'));
-	                    } },
-	                " < "
+	                { className: "row" },
+	                lim.min ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
+	                    "div",
+	                    { className: "prev",
+	                        onClick: function () {
+	                            onShift(curdate.subtract(1, 'M'));
+	                        } },
+	                    " < "
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "title",
+	                        onClick: function () {
+	                            onLevel('year', false);
+	                        } },
+	                    (month_names || MONTHS)[curdate.month()],
+	                    " ",
+	                    curdate.year()
+	                ),
+	                lim.max ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
+	                    "div",
+	                    { className: "next",
+	                        onClick: function () {
+	                            onShift(curdate.add(1, 'M'));
+	                        } },
+	                    " > "
+	                )
 	            ),
 	            _react2["default"].createElement(
 	                "div",
-	                { className: "title",
-	                    onClick: function () {
-	                        props.onLevel('year', false);
-	                    } },
-	                mnames[curdate.month()],
-	                " ",
-	                curdate.year()
-	            ),
-	            maxDate && maxDate.isSameOrBefore(last) ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
-	                "div",
-	                { className: "next",
-	                    onClick: function () {
-	                        props.onShift(curdate.add(1, 'M'));
-	                    } },
-	                " > "
+	                { className: "row wdays" },
+	                _.map(wday_names || WDAYS, function (wd) {
+	                    return _react2["default"].createElement(
+	                        "div",
+	                        { className: "cell wdname", key: wd },
+	                        wd
+	                    );
+	                })
 	            )
 	        );
+	    },
+	
+	    year_head: function year_head(_ref2) {
+	        var curdate = _ref2.curdate;
+	        var lim = _ref2.lim;
+	        var level = _ref2.level;
+	        var onShift = _ref2.onShift;
+	        var onLevel = _ref2.onLevel;
+	        return _react2["default"].createElement(
+	            "div",
+	            { className: "head " + level },
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "row" },
+	                lim.min ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
+	                    "div",
+	                    { className: "prev",
+	                        onClick: function () {
+	                            onShift(curdate.subtract(1, 'Y'));
+	                        } },
+	                    " < "
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "title", onClick: function () {
+	                            onLevel('decade', false);
+	                        } },
+	                    curdate.year()
+	                ),
+	                lim.max ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
+	                    "div",
+	                    { className: "next",
+	                        onClick: function () {
+	                            onShift(curdate.add(1, 'Y'));
+	                        } },
+	                    " > "
+	                )
+	            )
+	        );
+	    },
+	
+	    decade_head: function decade_head(_ref3) {
+	        var curdate = _ref3.curdate;
+	        var lim = _ref3.lim;
+	        var level = _ref3.level;
+	        var onShift = _ref3.onShift;
+	
+	        var start = Math.floor(curdate.year() / 10) * 10 - 1;
+	        return _react2["default"].createElement(
+	            "div",
+	            { className: "head " + level },
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "row" },
+	                lim.min ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
+	                    "div",
+	                    { className: "prev",
+	                        onClick: function () {
+	                            onShift(curdate.subtract(10, 'Y'));
+	                        } },
+	                    " < "
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "title" },
+	                    start + 1,
+	                    " - ",
+	                    start + 10
+	                ),
+	                lim.max ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
+	                    "div",
+	                    { className: "next",
+	                        onClick: function () {
+	                            onShift(curdate.add(10, 'Y'));
+	                        } },
+	                    " > "
+	                )
+	            )
+	        );
+	    },
+	
+	    month_body: function month_body(_ref4) {
+	        var curdate = _ref4.curdate;
+	        var lim = _ref4.lim;
+	        var onSelect = _ref4.onSelect;
+	
+	        var day = curdate.clone().startOf('month').startOf('week').startOf('day'),
+	            last = day.clone().add(42, 'd'),
+	            days = [];
 	
 	        while (day.isBefore(last)) {
 	            var week = [];
 	
 	            var _loop = function (d) {
-	                var isOut = maxDate && day.isAfter(maxDate) || minDate && day.isBefore(minDate),
+	                var isOut = lim.max && day.isAfter(lim.max) || lim.min && day.isBefore(lim.min),
 	                    date = day.clone();
 	                week.push(_react2["default"].createElement(
 	                    "div",
@@ -19791,7 +19913,7 @@
 	                            out: isOut,
 	                            today: day.dayOfYear() == (0, _moment2["default"])().dayOfYear() }),
 	                        onClick: isOut ? null : function () {
-	                            props.onSelect(date);
+	                            onSelect(date);
 	                        },
 	                        key: d },
 	                    day.date()
@@ -19811,53 +19933,33 @@
 	
 	        return _react2["default"].createElement(
 	            "div",
-	            { className: "body month" },
-	            header,
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "row wdays" },
-	                _.map(wdays, function (wd) {
-	                    return _react2["default"].createElement(
-	                        "div",
-	                        { className: "cell wdname", key: wd },
-	                        wd
-	                    );
-	                })
-	            ),
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "days" },
-	                days
-	            )
+	            { className: "days" },
+	            days
 	        );
 	    },
-	    year: function year(_ref2) {
-	        var curdate = _ref2.curdate;
 	
-	        var props = _objectWithoutProperties(_ref2, ["curdate"]);
+	    year_body: function year_body(_ref5) {
+	        var curdate = _ref5.curdate;
+	        var lim = _ref5.lim;
+	        var month_names = _ref5.month_names;
+	        var onLevel = _ref5.onLevel;
 	
-	        var mnames = props.month_names || MONTHS,
-	            months = [],
-	            max = props.maxDate && (0, _moment2["default"])(props.maxDate),
-	            min = props.minDate && (0, _moment2["default"])(props.minDate);
-	
-	        min = min && curdate.year() == min.year() && min.month() + 1;
-	        max = max && curdate.year() == max.year() && max.month() + 1;
+	        var months = [];
 	
 	        for (var j = 0; j < 3; j++) {
 	            var season = [];
 	
 	            var _loop2 = function (i) {
 	                var k = j * 4 + i,
-	                    isOut = max && k + 1 > max || min && k + 1 < min;
+	                    isOut = lim.max && k + 1 > lim.max || lim.min && k + 1 < lim.min;
 	
 	                season.push(_react2["default"].createElement(
 	                    "div",
 	                    { className: (0, _classnames2["default"])('cell', { out: isOut }), key: k,
 	                        onClick: isOut ? null : function () {
-	                            props.onLevel('month', true, new _moment2["default"](curdate).month(k));
+	                            onLevel('month', true, new _moment2["default"](curdate).month(k));
 	                        } },
-	                    mnames[k]
+	                    (month_names || MONTHS)[k]
 	                ));
 	            };
 	
@@ -19873,68 +19975,30 @@
 	
 	        return _react2["default"].createElement(
 	            "div",
-	            { className: "body year" },
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "row" },
-	                min ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
-	                    "div",
-	                    { className: "prev",
-	                        onClick: function () {
-	                            props.onShift(curdate.subtract(1, 'Y'));
-	                        } },
-	                    " < "
-	                ),
-	                _react2["default"].createElement(
-	                    "div",
-	                    { className: "title", onClick: function () {
-	                            props.onLevel('decade', false);
-	                        } },
-	                    curdate.year()
-	                ),
-	                max ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
-	                    "div",
-	                    { className: "next",
-	                        onClick: function () {
-	                            props.onShift(curdate.add(1, 'Y'));
-	                        } },
-	                    " > "
-	                )
-	            ),
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "months" },
-	                months
-	            )
+	            { className: "months" },
+	            months
 	        );
 	    },
-	    decade: function decade(_ref3) {
-	        var curdate = _ref3.curdate;
 	
-	        var props = _objectWithoutProperties(_ref3, ["curdate"]);
+	    decade_body: function decade_body(_ref6) {
+	        var curdate = _ref6.curdate;
+	        var lim = _ref6.lim;
+	        var onLevel = _ref6.onLevel;
 	
 	        var start = Math.floor(curdate.year() / 10) * 10 - 1,
-	            years = [],
-	            max = props.maxDate && (0, _moment2["default"])(props.maxDate),
-	            min = props.minDate && (0, _moment2["default"])(props.minDate);
-	
-	        min = min && min.year();
-	        min = min >= start && min <= start + 10 && min;
-	
-	        max = max && max.year();
-	        max = max >= start && max <= start + 10 && max;
+	            years = [];
 	
 	        for (var j = 0; j < 3; j++) {
 	            var ys = [];
 	
 	            var _loop3 = function (i) {
 	                var k = j * 4 + i,
-	                    isOut = max && start + k > max || min && start + k < min;
+	                    isOut = lim.max && start + k > lim.max || lim.min && start + k < lim.min;
 	                ys.push(_react2["default"].createElement(
 	                    "div",
 	                    { className: (0, _classnames2["default"])('cell', { other: !k || k == 11, out: isOut }), key: k,
 	                        onClick: isOut ? null : function () {
-	                            props.onLevel('year', true, new _moment2["default"]().year(start + k));
+	                            onLevel('year', true, new _moment2["default"]().year(start + k));
 	                        } },
 	                    start + k
 	                ));
@@ -19952,39 +20016,8 @@
 	
 	        return _react2["default"].createElement(
 	            "div",
-	            { className: "body decade" },
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "row" },
-	                min ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
-	                    "div",
-	                    { className: "prev",
-	                        onClick: function () {
-	                            props.onShift(curdate.subtract(10, 'Y'));
-	                        } },
-	                    " < "
-	                ),
-	                _react2["default"].createElement(
-	                    "div",
-	                    { className: "title" },
-	                    start + 1,
-	                    " - ",
-	                    start + 10
-	                ),
-	                max ? _react2["default"].createElement("div", { className: "noshift" }) : _react2["default"].createElement(
-	                    "div",
-	                    { className: "next",
-	                        onClick: function () {
-	                            props.onShift(curdate.add(10, 'Y'));
-	                        } },
-	                    " > "
-	                )
-	            ),
-	            _react2["default"].createElement(
-	                "div",
-	                { className: "years" },
-	                years
-	            )
+	            { className: "years" },
+	            years
 	        );
 	    }
 	};
@@ -20004,6 +20037,7 @@
 	
 	    onShift: function onShift(date) {
 	        this.prevdate = this.state.curdate.clone();
+	        this.prevlevel = this.state.level;
 	        this.setState({
 	            curdate: date,
 	            direction: date.isAfter(this.state.curdate) ? 'right' : 'left',
@@ -20044,42 +20078,58 @@
 	    render: function render() {
 	        var _this = this;
 	
+	        var p = this.props,
+	            s = this.state;
 	        return _react2["default"].createElement(
-	            _reactMotion.TransitionMotion,
-	            {
-	                willEnter: function () {
-	                    return _this.willEnterLeave(true);
+	            "div",
+	            { className: (0, _classnames2["default"])("calendar_wl_box", p.className) },
+	            _react2["default"].createElement(Tags[s.level + '_head'], _Object$assign({}, p, {
+	                curdate: (0, _moment2["default"])(s.curdate),
+	                onShift: this.onShift,
+	                onLevel: this.onLevel,
+	                level: s.level,
+	                lim: getMinMax(s.level, (0, _moment2["default"])(s.curdate), p.minDate, p.maxDate)
+	            })),
+	            _react2["default"].createElement(
+	                _reactMotion.TransitionMotion,
+	                {
+	                    willEnter: function () {
+	                        return _this.willEnterLeave(true);
+	                    },
+	                    willLeave: function () {
+	                        return _this.willEnterLeave(false);
+	                    },
+	                    styles: [{ key: 'k' + s.animId, style: { slide: (0, _reactMotion.spring)(0), zoom: (0, _reactMotion.spring)(0) } }]
 	                },
-	                willLeave: function () {
-	                    return _this.willEnterLeave(false);
-	                },
-	                styles: [{ key: 'k' + this.state.animId, style: { slide: (0, _reactMotion.spring)(0), zoom: (0, _reactMotion.spring)(0) } }]
-	            },
-	            function (interpolate) {
-	                return _react2["default"].createElement(
-	                    "div",
-	                    { className: "calendar_wl_box" },
-	                    interpolate.map(function (conf) {
-	                        var isnew = conf.key == 'k' + _this.state.animId;
-	                        return _react2["default"].createElement(
-	                            "div",
-	                            { className: "calendar_wl_container", key: conf.key,
-	                                style: {
-	                                    left: conf.style.slide * 100 + '%',
-	                                    opacity: 1 - Math.abs(conf.style.zoom + conf.style.slide),
-	                                    transform: 'scale( ' + (conf.style.zoom + 1) + ')',
-	                                    zIndex: isnew ? 2 : 1
-	                                } },
-	                            _react2["default"].createElement(LevelTags[isnew ? _this.state.level : _this.prevlevel], _Object$assign({}, _this.props, {
-	                                curdate: isnew ? _this.state.curdate.clone() : _this.prevdate,
-	                                onShift: _this.onShift,
-	                                onLevel: _this.onLevel,
-	                                onSelect: _this.onSelect
-	                            }))
-	                        );
-	                    })
-	                );
-	            }
+	                function (interpolate) {
+	                    return _react2["default"].createElement(
+	                        "div",
+	                        { className: "anim_container" },
+	                        interpolate.map(function (conf) {
+	                            var isnew = conf.key == 'k' + s.animId,
+	                                level = isnew ? s.level : _this.prevlevel,
+	                                date = (0, _moment2["default"])(isnew ? s.curdate.clone() : _this.prevdate);
+	                            return _react2["default"].createElement(
+	                                "div",
+	                                { className: "body " + level, key: conf.key,
+	                                    style: {
+	                                        left: conf.style.slide * 100 + '%',
+	                                        opacity: 1 - Math.abs(conf.style.zoom),
+	                                        transform: 'scale( ' + (conf.style.zoom + 1) + ')',
+	                                        zIndex: isnew ? 2 : 1
+	                                    } },
+	                                _react2["default"].createElement(Tags[level + '_body'], _Object$assign({}, p, {
+	                                    curdate: date,
+	                                    onShift: _this.onShift,
+	                                    onLevel: _this.onLevel,
+	                                    onSelect: _this.onSelect,
+	                                    lim: getMinMax(level, date, p.minDate, p.maxDate)
+	                                }))
+	                            );
+	                        })
+	                    );
+	                }
+	            )
 	        );
 	    }
 	});
@@ -21641,26 +21691,7 @@
 
 
 /***/ },
-/* 162 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	exports["default"] = function (obj, keys) {
-	  var target = {};
-	
-	  for (var i in obj) {
-	    if (keys.indexOf(i) >= 0) continue;
-	    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-	    target[i] = obj[i];
-	  }
-	
-	  return target;
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
+/* 162 */,
 /* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
