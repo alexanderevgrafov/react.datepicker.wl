@@ -7,7 +7,7 @@
     border: 1px solid black;
 }
 
-.calendar_wl_box .head {
+.calendar_wl_box .cwl-head {
     position: absolute;
     width: 100%;
     height:4em;
@@ -15,7 +15,7 @@
     overflow: hidden;
 }
 
-.calendar_wl_box .anim_container {
+.calendar_wl_box .cwl-anim_container {
     position: absolute;
     width: 100%;
     top: 4em;
@@ -24,73 +24,73 @@
     overflow: hidden;
 }
 
-.calendar_wl_box .body {
+.calendar_wl_box .cwl-body {
     position: absolute;
     width:100%;
 }
 
-.calendar_wl_box .row {
+.calendar_wl_box .cwl-row {
     display: flex;
     line-height: 1.5em;
 }
 
-.calendar_wl_box .body.year .row,
-.calendar_wl_box .body.decade .row {
+.calendar_wl_box .cwl-body.year .cwl-row,
+.calendar_wl_box .cwl-body.decade .cwl-row {
     line-height: 3em;
 }
 
-.calendar_wl_box .head .row{
+.calendar_wl_box .cwl-head .cwl-row{
     line-height: 3em;
 }
 
-.calendar_wl_box .head.month .row.wdays {
+.calendar_wl_box .cwl-head.month .cwl-row.wdays {
     line-height: 1em;
     font-size:.8em;
 }
 
-.calendar_wl_box .head .prev,
-.calendar_wl_box .head .next {
+.calendar_wl_box .cwl-head .cwl-prev,
+.calendar_wl_box .cwl-head .cwl-next {
     flex: 1 1;
     cursor: pointer;
 }
 
-.calendar_wl_box .head .noshift {
+.calendar_wl_box .cwl-head .cwl-noshift {
     flex: 1 1;
 }
 
-.calendar_wl_box .head .title {
+.calendar_wl_box .cwl-head .cwl-title {
     flex: 5 1;
     cursor: pointer;
 }
-.calendar_wl_box .head.decade .title {
+.calendar_wl_box .cwl-head.decade .cwl-title {
     cursor:default;
 }
 
-.calendar_wl_box .row .cell {
+.calendar_wl_box .cwl-row .cwl-cell {
     flex: 1 1;
     display: inline-block;
     cursor: pointer;
 }
 
-.calendar_wl_box .row .cell:hover {
+.calendar_wl_box .cwl-row .cwl-cell:hover {
     background-color: rgba(0, 0, 255, .2);
 }
 
-.calendar_wl_box .row .cell.out,
-.calendar_wl_box .row .cell.wdname {
+.calendar_wl_box .cwl-row .cwl-cell.out,
+.calendar_wl_box .cwl-row .cwl-cell.wdname {
     background-color: transparent;
     cursor: default;
 }
 
-.calendar_wl_box .row .cell.today {
+.calendar_wl_box .cwl-row .cwl-cell.today {
     color: maroon;
 }
 
-.calendar_wl_box .row .cell.other {
+.calendar_wl_box .cwl-row .cwl-cell.other {
     color: silver;
 }
 
-.calendar_wl_box .row .cell.out {
+.calendar_wl_box .cwl-row .cwl-cell.out {
     color: #d0d0d0;
 }
 

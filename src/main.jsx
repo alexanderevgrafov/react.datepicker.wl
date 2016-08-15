@@ -4,7 +4,8 @@ import moment from "moment"
 import cx from "classnames"
 
 const MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
-    WDAYS = ["su", "mo", "tu", "we", "th", "fr", "sa"];
+    WDAYS = ["su", "mo", "tu", "we", "th", "fr", "sa"],
+    CLASS_PREF = 'cwl-';
 
 const getMinMax = function (level, curdate, pMin, pMax) {
     let max = pMax && moment(pMax),
@@ -33,47 +34,47 @@ const getMinMax = function (level, curdate, pMin, pMax) {
 };
 
 const Tags = {
-    month_head: ({curdate, lim, level, month_names, wday_names, onShift, onLevel}) =>
-        <div className={"head " + level}>
-            <div className="row">
-                { lim.min ? <div className="noshift"></div> : <div className="prev"
+    month_head: ({curdate, lim, level, month_names, wday_names, onShift, onLevel, pref}) =>
+        <div className={pref + "head " + level}>
+            <div className={ pref + "row" }>
+                { lim.min ? <div className={ pref + "noshift" }></div> : <div className={ pref + "prev" }
                                                                    onClick={ ()=>{onShift(curdate.subtract(1, 'M'))} }> &lt; </div>}
-                <div className="title"
+                <div className={ pref + "title" }
                      onClick={ ()=>{onLevel( 'year', false )} }>{ (month_names || MONTHS)[curdate.month()] }&nbsp;{ curdate.year() }</div>
-                { lim.max ? <div className="noshift"></div> : <div className="next"
+                { lim.max ? <div className={ pref + "noshift" }></div> : <div className={ pref + "next" }
                                                                    onClick={ ()=>{onShift(curdate.add(1, 'M'))} }> &gt; </div> }
             </div>
-            <div className="row wdays">
-                { _.map(wday_names || WDAYS, wd => <div className="cell wdname" key={ wd }>{ wd }</div>) }
+            <div className={ pref + "row wdays" }>
+                { _.map(wday_names || WDAYS, wd => <div className={ pref + "cell wdname"} key={ wd }>{ wd }</div>) }
             </div>
         </div>,
 
-    year_head: ({curdate, lim, level, onShift, onLevel})=>
-        <div className={"head " + level}>
-            <div className="row">
-                { lim.min ? <div className="noshift"></div> : <div className="prev"
+    year_head: ({curdate, lim, level, onShift, onLevel, pref})=>
+        <div className={pref + "head " + level}>
+            <div className={ pref + "row" }>
+                { lim.min ? <div className={ pref + "noshift" }></div> : <div className={ pref + "prev" }
                                                                    onClick={ ()=>{onShift(curdate.subtract(1, 'Y'))} }> &lt; </div> }
-                <div className="title" onClick={ ()=>{onLevel( 'decade', false )} }>{ curdate.year() }</div>
-                { lim.max ? <div className="noshift"></div> : <div className="next"
+                <div className={ pref + "title" } onClick={ ()=>{onLevel( 'decade', false )} }>{ curdate.year() }</div>
+                { lim.max ? <div className={ pref + "noshift" }></div> : <div className={ pref + "next" }
                                                                    onClick={ ()=>{onShift(curdate.add(1, 'Y'))} }> &gt; </div> }
             </div>
         </div>
     ,
 
-    decade_head: ({curdate, lim, level, onShift})=> {
+    decade_head: ({curdate, lim, level, onShift, pref})=> {
         let start = (Math.floor(curdate.year() / 10)) * 10 - 1;
-        return <div className={"head " + level}>
-            <div className="row">
-                { lim.min ? <div className="noshift"></div> : <div className="prev"
+        return <div className={pref + "head " + level}>
+            <div className={ pref + "row" }>
+                { lim.min ? <div className={ pref + "noshift" }></div> : <div className={ pref + "prev" }
                                                                    onClick={ ()=>{onShift(curdate.subtract(10, 'Y'))} }> &lt; </div> }
-                <div className="title">{ start + 1 } - { start + 10 }</div>
-                { lim.max ? <div className="noshift"></div> : <div className="next"
+                <div className={ pref + "title" }>{ start + 1 } - { start + 10 }</div>
+                { lim.max ? <div className={ pref + "noshift" }></div> : <div className={ pref + "next" }
                                                                    onClick={ ()=>{onShift(curdate.add(10, 'Y'))} }> &gt; </div> }
             </div>
         </div>
     },
 
-    month_body: ({curdate, lim, onSelect})=> {
+    month_body: ({curdate, lim, onSelect, pref})=> {
         let day = curdate.clone().startOf('month').startOf('week').startOf('day'),
             last = day.clone().add(42, 'd'),
             days = [];
@@ -84,7 +85,7 @@ const Tags = {
                 let isOut = (lim.max && day.isAfter(lim.max)) || (lim.min && day.isBefore(lim.min)),
                     date = day.clone();
                 week.push(<div
-                    className={ cx('cell', {
+                    className={ cx(pref + 'cell', {
             other: day.month() != curdate.month(),
             out: isOut,
             today: day.dayOfYear() == moment().dayOfYear() })
@@ -93,13 +94,13 @@ const Tags = {
                     key={ d }>{ day.date() }</div>);
                 day.add(1, 'd');
             }
-            days.push(<div className="row week" key={ day.date() }>{ week }</div>);
+            days.push(<div className={ pref + "row week" } key={ day.date() }>{ week }</div>);
         }
 
-        return <div className="days">{ days }</div>;
+        return <div className={ pref + "days" }>{ days }</div>;
     },
 
-    year_body: ({curdate, lim, month_names, onLevel})=> {
+    year_body: ({curdate, lim, month_names, onLevel, pref})=> {
         let months = [];
 
         for (let j = 0; j < 3; j++) {
@@ -108,16 +109,16 @@ const Tags = {
                 let k = j * 4 + i,
                     isOut = (lim.max && k + 1 > lim.max) || (lim.min && k + 1 < lim.min);
 
-                season.push(<div className={ cx('cell', { out: isOut })} key={ k }
+                season.push(<div className={ cx(pref + 'cell', { out: isOut })} key={ k }
                                  onClick={ isOut ? null : ()=>{ onLevel( 'month', true, new moment(curdate).month( k ) ) }}>{ (month_names || MONTHS)[ k ] }</div>);
             }
-            months.push(<div className="row" key={ j }>{ season }</div>);
+            months.push(<div className={ pref + "row" } key={ j }>{ season }</div>);
         }
 
-        return <div className="months">{ months }</div>;
+        return <div className={ pref + "months" }>{ months }</div>;
     },
 
-    decade_body: ({curdate, lim, onLevel})=> {
+    decade_body: ({curdate, lim, onLevel, pref})=> {
         let start = (Math.floor(curdate.year() / 10)) * 10 - 1,
             years = [];
 
@@ -126,13 +127,13 @@ const Tags = {
             for (let i = 0; i < 4; i++) {
                 let k = j * 4 + i,
                     isOut = (lim.max && start + k > lim.max) || (lim.min && start + k < lim.min);
-                ys.push(<div className={cx('cell',{other:!k||k==11, out: isOut })} key={ k }
+                ys.push(<div className={cx(pref + 'cell', {other:!k||k==11, out: isOut })} key={ k }
                              onClick={ isOut ? null : ()=>{ onLevel( 'year', true, new moment().year(start + k) ) }}>{ start + k }</div>);
             }
-            years.push(<div className="row" key={ j }>{ ys }</div>);
+            years.push(<div className={ pref + "row" } key={ j }>{ ys }</div>);
         }
 
-        return <div className="years">{ years }</div>;
+        return <div className={ pref + "years" }>{ years }</div>;
     }
 };
 
@@ -188,7 +189,9 @@ export default React.createClass({
     },
 
     render(){
-        let p = this.props, s = this.state;
+        let p = this.props, 
+            s = this.state, 
+            pref = p.class_prefix || CLASS_PREF;
         return (
             <div className={ cx("calendar_wl_box", p.className)}>
                 {
@@ -196,6 +199,7 @@ export default React.createClass({
                         curdate: moment(s.curdate),
                         onShift: this.onShift,
                         onLevel: this.onLevel,
+                        pref: pref,
                         level: s.level,
                         lim : getMinMax( s.level, moment(s.curdate), p.minDate, p.maxDate )
                         }))
@@ -204,12 +208,12 @@ export default React.createClass({
                 willEnter={ ()=>this.willEnterLeave(true) }
                 willLeave={ ()=>this.willEnterLeave(false) }
                 styles={[{ key: 'k' + s.animId, style:{ slide:spring(0), zoom:spring(0) }}]}
-            >{ interpolate => <div className="anim_container">{
+            >{ interpolate => <div className={ pref + "anim_container" }>{
                 interpolate.map( conf => {
                     let isnew = conf.key == 'k'+s.animId,
                         level = isnew ? s.level : this.prevlevel,
                         date = moment(isnew ? s.curdate.clone() : this.prevdate);
-                    return <div className={"body " + level} key={ conf.key }
+                    return <div className={ pref + "body " + level} key={ conf.key }
                                 style={ {
                                 left: conf.style.slide*100 + '%',
                                 opacity: 1 - Math.abs(conf.style.zoom),
@@ -218,6 +222,7 @@ export default React.createClass({
                                 } }>{
                         React.createElement(Tags[ level + '_body' ], Object.assign({}, p, {
                             curdate: date,
+                            pref: pref,
                             onShift: this.onShift,
                             onLevel: this.onLevel,
                             onSelect: this.onSelect,
